@@ -17,7 +17,6 @@ class CreateOffersTable extends Migration
             $table->increments('id');
             $table->string('description_offre')->unique();
             $table->string('valeur_offre');
-            $table->dateTime('date_experation');
             $table->boolean('active');
             $table->timestamps();
         });

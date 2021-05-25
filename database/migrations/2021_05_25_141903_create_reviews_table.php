@@ -23,7 +23,6 @@ class CreateReviewsTable extends Migration
             $table->timestamps();
             $table->foreign('user_id')->references('id') ->on('users')->onDelete('cascade');
             $table->foreign('food_id')->references('id') ->on('foods')->onDelete('cascade');
-
         });
     }
 

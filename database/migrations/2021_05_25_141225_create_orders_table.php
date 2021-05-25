@@ -15,15 +15,13 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
+            $table->string("unique_order_id")->unique();
             $table->integer( 'user_id' )->unsigned();
-            $table->boolean('a_un_coupon');
-            $table->string('valeur_coupon')->nullable();
-            $table->integer( 'coupon_id' )->unsigned();
-            $table->string('status')->nullable();
+            $table->decimal('total', 10, 2);
+            $table->string('status')->default('en_attente');
+            $table->string('nom_livreur')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users') ->onDelete('cascade');
-            $table->foreign('coupon_id')->references('id')->on('coupons') ->onDelete('cascade');
-
         });
     }
 

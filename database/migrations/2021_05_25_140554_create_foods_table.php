@@ -23,13 +23,17 @@ class CreateFoodsTable extends Migration
             $table->longText('description_en');
             $table->decimal('prix', 10, 2);
             $table->string('image')->nullable();
-            $table->integer( 'category_id' )->unsigned();
+            $table->integer('category_id')->unsigned();
+            $table->integer('offer_id')->unsigned()->nullable();
             $table->boolean('recommandee');
             $table->boolean('populaire');
             $table->boolean('nouveau');
             $table->timestamps();
-            $table->foreign('category_id')->references('id') ->on('categories')->onDelete('cascade');
-
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('offer_id')
+                    ->references('id')
+                    ->on('offers')
+                    ->onDelete('set null');
         });
     }
 

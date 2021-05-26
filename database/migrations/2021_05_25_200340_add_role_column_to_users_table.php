@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddNumPhoneAndPhotoToUsersTable extends Migration
+class AddRoleColumnToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class AddNumPhoneAndPhotoToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('number_phone');
-            $table->string('photo')->nullable();
+            $table->enum('role',  ['client', 'admin', 'livreur'])->default('client');
         });
     }
 
@@ -27,8 +26,7 @@ class AddNumPhoneAndPhotoToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('number_phone');
-            $table->dropColumn('photo');
+            $table->dropColumn('role');
         });
     }
 }

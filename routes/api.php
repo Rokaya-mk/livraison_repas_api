@@ -21,4 +21,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
  //UserController
  Route::post('user_register','API\UserController@userRegister');
  Route::post('verification_email','API\UserController@emailVerification');
+ Route::post('login','API\UserController@login');
+ Route::post('forgot-password','API\UserController@forgotPassword');
+ Route::post('reset-password','API\UserController@resetPassword');
+
+ Route::middleware('auth:api')->group( function (){
+    Route::post('ajouter-livreur','API\UserController@ajouterLivreur')->middleware('can:isAdmin');
+    Route::put('change-password','API\UserController@changePassword');
+    Route::post('logout-api','API\UserController@logoutApi');
+
+ });
+
+
+
 

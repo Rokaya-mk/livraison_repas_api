@@ -25,7 +25,7 @@ class CreateFoodsTable extends Migration
             $table->boolean('populaire')->default(0);
             $table->boolean('nouveau')->default(1);
             $table->timestamps();
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')->onUpdate('cascade');
             $table->foreign('offer_id')
                     ->references('id')
                     ->on('offers')

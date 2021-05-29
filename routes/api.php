@@ -39,6 +39,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
  Route::post('update-category/{id}','API\CategoryController@updateCategory')->middleware('auth:api');
  Route::delete('delete-category/{id}','API\CategoryController@destroyCategory')->middleware('auth:api');
 
-
+ //Food Routes
+ Route::get('foods','API\FoodController@foods');
+ Route::post('add-newFood','API\FoodController@addNewFood')->middleware('auth:api');
+ Route::get('show-food/{id}','API\FoodController@showFood');
+ Route::put('update-food/{id}','API\FoodController@updateFood')->middleware('auth:api');
+ Route::put('update-foodStatus/{id}','API\FoodController@updateStatusProduct')->middleware('auth:api');
+ Route::delete('delete-food/{id}','API\FoodController@destroyFood')->middleware('auth:api');
+ Route::get('search-food','API\FoodController@searchFood');
 
 

@@ -32,6 +32,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
  });
 
+ //Category Routes
+ Route::get('categories','API\CategoryController@categories');
+ Route::post('add-category','API\CategoryController@addNewCategory')->middleware('auth:api');
+ Route::get('show-categoryProducts/{idCategory}','API\CategoryController@showCategoryProducts');
+ Route::post('update-category/{id}','API\CategoryController@updateCategory')->middleware('auth:api');
+ Route::delete('delete-category/{id}','API\CategoryController@destroyCategory')->middleware('auth:api');
+
 
 
 

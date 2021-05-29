@@ -37,7 +37,7 @@ class UserController extends BaseController
                 'password' => 'required',
                 'c_password' => 'required|same:password',
                 'number_phone'=> 'required|numeric',
-                'photo' => 'nullable|mimes:jpg,jpeg,png|max:5048',
+                'photo' => 'nullable|mimes:jpg,jpeg,png|max:2048',
 
             ]);
 

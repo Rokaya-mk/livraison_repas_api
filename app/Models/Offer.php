@@ -11,7 +11,11 @@ class Offer extends Model
     protected $fillable=[
         'description_offre',
         'valeur_offre',
-        'active'
+        'type_offre',
+        'active',
+        'date_creation',
+        'date_experation',
+
     ];
 
 

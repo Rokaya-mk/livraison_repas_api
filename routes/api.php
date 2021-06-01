@@ -48,4 +48,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
  Route::delete('delete-food/{id}','API\FoodController@destroyFood')->middleware('auth:api');
  Route::get('search-food','API\FoodController@searchFood');
 
+ //Offer Routes\
+ Route::middleware('auth:api')->group( function (){
+    Route::get('offers','API\OfferController@displayOffers');
+    Route::post('add-newOffer','API\OfferController@storeNewOffer');
+    Route::get('show-offer/{id}','API\OfferController@showOffer');
+    Route::put('update-offer/{id}','API\OfferController@updateOffer');
+    Route::delete('delete-offer/{id}','API\OfferController@destroyOffer');
+    Route::put('disable-offer/{id}','API\OfferController@disableOffer');
+ });
 

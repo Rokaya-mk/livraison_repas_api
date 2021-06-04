@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOffersTable extends Migration
+class AddIsVerifiedToUtilisateursTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateOffersTable extends Migration
      */
     public function up()
     {
-        Schema::create('offers', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('description_offre')->unique();
-            $table->decimal('valeur_offre',8,2);
-            $table->boolean('active');
-            $table->timestamps();
+        Schema::table('utilisateurs', function (Blueprint $table) {
+            $table->string('is_verified')->nullable();
         });
     }
 
@@ -29,6 +25,8 @@ class CreateOffersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('offers');
+        Schema::table('utilisateurs', function (Blueprint $table) {
+            $table->dropColumn('is_verified');
+        });
     }
 }

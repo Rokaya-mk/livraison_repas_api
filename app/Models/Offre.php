@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Offer extends Model
+class Offre extends Model
 {
     use HasFactory;
     protected $fillable=[
-        'description_offre',
+        'description_offre_fr',
+        'description_offre_en',
+        'description_offre_ar',
         'valeur_offre',
         'type_offre',
         'active',
@@ -19,8 +21,8 @@ class Offer extends Model
     ];
 
 
-public function foods()
+public function repas()
 {
-    return $this->hasMany('App\Models\Food');
+    return $this->hasMany('App\Models\Repas');
 }
 }

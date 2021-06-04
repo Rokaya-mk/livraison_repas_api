@@ -17,13 +17,15 @@ class User extends Authenticatable
      *
      * @var array
      */
+    protected $table='utilisateurs';
     protected $fillable = [
         'name',
         'email',
         'password',
-        'number_phone',
-        'photo',
-        'role'
+        'num_telephone',
+        'photos',
+        'role',
+
     ];
 
     /**
@@ -45,7 +47,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function reviews(){
-        return $this->hasMany('App\Models\Review');
+    public function adresse(){
+        return $this->hasOne('App\Models\Adresse');
+    }
+
+    public function commentaires(){
+        return $this->hasMany('App\Models\Commentaire');
     }
 }

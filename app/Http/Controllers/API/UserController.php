@@ -22,7 +22,7 @@ class UserController extends BaseController
 
 
         $checkEmail = User::where('email', $request->email)->first();
-        $checkPhone = User::where('number_phone', $request->phone)->first();
+        $checkPhone = User::where('num_telephone', $request->phone)->first();
 
         if ($checkPhone || $checkEmail) {
             $response = [
@@ -36,8 +36,8 @@ class UserController extends BaseController
                 'email' => 'required | email',
                 'password' => 'required',
                 'c_password' => 'required|same:password',
-                'number_phone'=> 'required|numeric',
-                'photo' => 'nullable|mimes:jpg,jpeg,png|max:2048',
+                'num_telephone'=> 'required|numeric',
+                'photos' => 'nullable|mimes:jpg,jpeg,png|max:2048',
 
             ]);
 
@@ -48,21 +48,21 @@ class UserController extends BaseController
             $input = $request->all();
             $input['password'] = Hash::make($input['password']);
             $user = User::create($input);
-            if ($request->hasFile('photo')) {
+            if ($request->hasFile('photos')) {
 
-                $filename = $request->file('photo');
-                //$filename = time() . '.' . $photo->guessExtension();
-            //     $img=Image::make($photo)->resize(120, 120, function ($constraint) {
+                $filename = $request->file('photos');
+                //$filename = time() . '.' . $photos->guessExtension();
+            //     $img=Image::make($photos)->resize(120, 120, function ($constraint) {
             //     $constraint->aspectRatio();
             //  });
-             Storage::putFileAs('images',$filename,random_int(1,100). '.' .$filename->guessExtension());
+             Storage::putFileAs('images/profile',$filename,random_int(1,100). '.' .$filename->guessExtension());
 
-             DB::table('users')->where('email', $request['email'])->update([ 'photo' => $filename, ]); }
+             DB::table('utilisateurs')->where('email', $request['email'])->update([ 'photos' => $filename, ]); }
 
 
             $token = Str::random(5);
             try{
-                DB::table('users')->where('email', $request['email'])->update([
+                DB::table('utilisateurs')->where('email', $request['email'])->update([
             	    'is_verified' => $token,
                 ]);
                 $email = $request['email'];
@@ -75,16 +75,16 @@ class UserController extends BaseController
             }
             $userData = User::where('email', $request['email'])->first();
 
-            if($request->has('address1')){
-                $address=new Adresse();
-                $address->adresse1= $request->address1 ;
-                if($request->has('address2'))
-                $address->adresse2= $request->adress2 ;
-                $address->ville= $request->ville;
-                $address->code_postal = $request->code_postal;
-                $address->user_id=$userData->id;
+            if($request->has('adresse1')){
+                $adresse=new Adresse();
+                $adresse->adresse1= $request->adresse1 ;
+                if($request->has('adresse2'))
+                $adresse->adresse2= $request->adresse2 ;
+                $adresse->ville= $request->ville;
+                $adresse->code_postal = $request->code_postal;
+                $adresse->id_user=$userData->id;
                 try {
-                    $address->save();
+                    $adresse->save();
                 } catch (\Throwable $th) {
                     return $this->SendError($th->getMessage(), 400);
                 }
@@ -92,7 +92,7 @@ class UserController extends BaseController
             }
             $success['name'] = $userData->name;
             $success['role'] = $userData->role;
-            $success['photo'] = $userData->photo;
+            $success['photos'] = $userData->photos;
             $success['token'] = $userData->createToken('@123*EMOOO*457##')->accessToken;
             return $this->SendResponse($success, 'Registered successfully');
         } catch (\Throwable $th) {
@@ -110,7 +110,7 @@ class UserController extends BaseController
                 }
                 $success['name'] = $user->name;
                 $success['role'] = $user->role;
-                $success['photo'] = $user->photo;
+                $success['photos'] = $user->photos;
                 $success['token'] = $user->createToken('@123*EMOOO*457##')->accessToken;
                 return $this->SendResponse($success, 'you logging in successfully');
             }else{
@@ -137,7 +137,7 @@ class UserController extends BaseController
             if (Gate::allows('isAdmin')) {
                 $success['name'] = $user->name;
 	            $success['role'] = $user->role;
-                $success['photo'] = $user->photo;
+                $success['photos'] = $user->photos;
                 $success['token'] = $user->createToken('@123*EMOOO*457##')->accessToken;
 		        return $this->SendResponse($success, 200);
             }
@@ -158,7 +158,7 @@ class UserController extends BaseController
         }
         else{
             $checkEmail = User::where('email', $request->email)->first();
-            $checkPhone = User::where('number_phone', $request->phone)->first();
+            $checkPhone = User::where('num_telephone', $request->phone)->first();
 
             if ($checkPhone || $checkEmail) {
                 $response = [
@@ -172,8 +172,8 @@ class UserController extends BaseController
                     'email' => 'required | email',
                     'password' => 'required',
                     'c_password' => 'required|same:password',
-                    'number_phone'=> 'required|numeric',
-                    'photo' => 'nullable|mimes:jpg,jpeg,png|max:5048',
+                    'num_telephone'=> 'required|numeric',
+                    'photos' => 'nullable|mimes:jpg,jpeg,png|max:5048',
 
                 ]);
 
@@ -188,7 +188,7 @@ class UserController extends BaseController
 
                 $token = Str::random(5);
                 try{
-                    DB::table('users')->where('email', $request['email'])->update([
+                    DB::table('utilisateurs')->where('email', $request['email'])->update([
                         'is_verified' => $token,
                     ]);
                     $email = $request['email'];
@@ -203,7 +203,7 @@ class UserController extends BaseController
                 $userData = User::where('email', $request['email'])->first();
                 $success['name'] = $userData->name;
                 $success['role'] = $userData->role;
-                $success['photo'] = $userData->photo;
+                $success['photos'] = $userData->photos;
                 $success['token'] = $userData->createToken('@123*EMOOO*457##')->accessToken;
                 return $this->SendResponse($success, 'Registered successfully');
             } catch (\Throwable $th) {

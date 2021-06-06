@@ -10,14 +10,14 @@ class Adresse extends Model
 {
     use HasFactory;
     protected $fillable=[
+        'user_id',
         'adresse1',
         'adresse2',
-        'ville',
         'code_postal',
-        'id_user'
+
     ];
 
     public function utilisateur(){
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\User','user_id');
     }
 }

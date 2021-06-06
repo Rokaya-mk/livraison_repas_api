@@ -10,7 +10,7 @@ class Commande extends Model
     use HasFactory;
     protected $fillable=[
         'unique_id_commande',
-        'id_user',
+        'user_id',
         'total',
         'est_payée',
         'status',

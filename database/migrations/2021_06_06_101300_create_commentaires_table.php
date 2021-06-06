@@ -15,14 +15,14 @@ class CreateCommentairesTable extends Migration
     {
         Schema::create('commentaires', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('id_user');
+            $table->unsignedBigInteger('user_id');
             $table->integer('note');
             $table->longText('commentaire');
-            $table->unsignedBigInteger('id_repas');
+            $table->unsignedBigInteger('repas_id');
             $table->boolean('date_de_commentaire');
             $table->timestamps();
-            $table->foreign('id_user')->references('id')->on('utilisateurs')->onDelete('cascade');
-            $table->foreign('id_repas')->references('id')->on('repas')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('utilisateurs')->onDelete('cascade');
+            $table->foreign('repas_id')->references('id')->on('repas')->onDelete('cascade');
         });
     }
 

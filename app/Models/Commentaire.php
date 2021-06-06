@@ -9,10 +9,10 @@ class Commentaire extends Model
 {
     use HasFactory;
     protected $fillable=[
-    'id_user',
+    'user_id',
     'note',
     'commentaire',
-    'id_repas',
+    'repas_id',
     'date_de_commentaire'
 ];
 

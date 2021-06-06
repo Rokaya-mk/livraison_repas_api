@@ -19,8 +19,8 @@ class Repas extends Model
         'prix',
         'image',
         'stock',
-        'id_categorie',
-        'id_offre',
+        'categorie_id',
+        'offre_id',
         'recommandee',
         'populaire',
         'nouveau'

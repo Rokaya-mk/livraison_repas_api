@@ -24,14 +24,14 @@ class CreateRepasTable extends Migration
             $table->decimal('prix', 10, 2);
             $table->string('image');
             $table->bigInteger('stock');
-            $table->unsignedBigInteger('id_categorie');
-            $table->unsignedBigInteger('id_offre')->nullable();
+            $table->unsignedBigInteger('categorie_id');
+            $table->unsignedBigInteger('offre_id')->nullable();
             $table->boolean('recommandee')->default(0);
             $table->boolean('populaire')->default(0);
             $table->boolean('nouveau')->default(1);
             $table->timestamps();
-            $table->foreign('id_categorie')->references('id')->on('categories')->onUpdate('cascade');
-            $table->foreign('id_offre')
+            $table->foreign('categorie_id')->references('id')->on('categories')->onUpdate('cascade');
+            $table->foreign('offre_id')
                     ->references('id')
                     ->on('offres')
                     ->onDelete('set null');

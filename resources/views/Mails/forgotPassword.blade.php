@@ -1,3 +1,4 @@
-copy the code and paste it in the
-app <br>
+<p>
+{{trans('messages.copy_code')}}
+</p>
 {{$token}}

@@ -16,13 +16,13 @@ class CreateCommandesTable extends Migration
         Schema::create('commandes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string("unique_id_commande")->unique();
-            $table->unsignedBigInteger('id_user');
+            $table->unsignedBigInteger('user_id');
             $table->decimal('total', 10, 2);
             $table->boolean('est_payée')->default(false);
             $table->enum('status', ['en attente','en cours','livrée','terminée','annulée','expirée'])->default('en attente');
             $table->string('nom_livreur')->nullable();
             $table->timestamps();
-            $table->foreign('id_user')->references('id')->on('commandes') ->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('commandes') ->onDelete('cascade');
         });
     }
 

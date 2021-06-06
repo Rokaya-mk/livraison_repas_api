@@ -1,4 +1,4 @@
-copier ce code pour vérifier votre email <br>
+{{trans('messages.verification_blade')}} <br>
 
 {{$token}}
 

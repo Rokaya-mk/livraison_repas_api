@@ -15,13 +15,13 @@ class CreateCommandeRepasTable extends Migration
     {
         Schema::create('commande_repas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('id_repas');
-            $table->unsignedBigInteger('id_commande');
+            $table->unsignedBigInteger('repas_id');
+            $table->unsignedBigInteger('commande_id');
             $table->decimal('prix', 10, 2);
             $table->integer('quantite')->default(1);
             $table->timestamps();
-            $table->foreign('id_repas')->references('id')->on('repas') ->onDelete('cascade');
-            $table->foreign('id_commande')->references('id')->on('commandes') ->onDelete('cascade');
+            $table->foreign('repas_id')->references('id')->on('repas') ->onDelete('cascade');
+            $table->foreign('commande_id')->references('id')->on('commandes') ->onDelete('cascade');
         });
     }
 

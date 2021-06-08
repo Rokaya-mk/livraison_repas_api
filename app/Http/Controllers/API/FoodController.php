@@ -3,125 +3,196 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\BaseController as BaseController;
-use App\Models\Food;
+use App\Models\Categorie;
+use App\Models\Repas;
 use Auth;
 use Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class FoodController extends BaseController
 {
 
-    public function foods()
+    //display all foods
+    public function foods(Request $request)
     {
-        $foods=Food::all();
-        if($foods->isEmpty())
-            return $this->SendError('foods list is empty!');
-        return $this->SendResponse($foods,'Foods list retrieved Successfully!');
+        // $foods=Repas::select('id','nom_'.App::getLocale(),'description_'.App::getLocale(),
+        //                     'prix','image','stock','categorie_id','offre_id',
+        //                     'recommandee','populaire','nouveau','created_at','updated_at'
+        //                     )->get();
+
+        $foods=Repas::all();
+      if($foods->isEmpty())
+            //foods list is empty!
+           //dd($request->header('localization'));
+            return $this->SendError(trans_choice('messages.foods_msg',2));
+            //Foods list retrieved Successfully!
+        return $this->SendResponse($foods,trans_choice('messages.foods_msg',1));
     }
 
     public function addNewFood(Request $request)
     {
-        $user=Auth::user();
-        //dd($user);
-        //verify if user is admin
-        $this->authorize('isAdmin',$user);
+        if(Gate::denies('isAdmin')){
+            return $this->SendError(trans('messages.admin_permession'));
+        }
+
         //validate data
         $validator=Validator::make($request->all(),[
-            'nom'         => 'required|unique:foods',
-            'description' => 'required',
-            'prix'        =>'required',
-            'image'       =>'required|mimes:jpg,jpeg,png|max:2048',
-            'category_id' =>'required',
-            'offer_id'    =>'nullable'
+        'nom_fr'                =>'required|unique:repas',
+        'nom_en'                =>'nullable',
+        'nom_ar'                =>'nullable',
+        'description_fr'        => 'required',
+        'description_en'        =>'nullable',
+        'description_ar'        =>'nullable',
+        'prix'                  =>'required',
+        'image'                 =>'required|mimes:jpg,jpeg,png|max:2048',
+        'stock'                 =>'required',
+        'categorie_id'          =>'required',
+        'offre_id'              =>'nullable',
+        // 'recommandee'           =>'required',
+        // 'populaire'             =>'required',
+        // 'nouveau'               =>'required'
+
         ]);
         if($validator->fails())
-            return $this->SendError('Error Validator ', $validator->errors());
+            return $this->SendError(trans('messages.error_validator'), $validator->errors());
             //dd($validator);
         //try to add category into database
         try {
-            $food = new Food();
+            $food = new Repas();
             //dd($food);
-            $food->nom=$request->nom;
-            $food->description=$request->description;
+            $food->nom_fr=$request->nom_fr;
+            $food->nom_en=$request->nom_en;
+            $food->nom_ar=$request->nom_ar;
+            $food->description_fr=$request->description_fr;
+            $food->description_en=$request->description_en;
+            $food->description_ar=$request->description_ar;
             $food->prix=$request->prix;
-            $food->category_id=$request->category_id;
+            //$food->category_id=$request->category_id;
             //dd($food);
             $image = $request->file('image');
             $filename = time() . random_int(1,100). '.' .$image->guessExtension();
             Storage::putFileAs('images/foods',$image,$filename);
             $food->image=$filename;
-
-            if($request->offer_id)
+            $food->stock=$request->stock;
+            //find categorie
+            $category=Categorie::find($request->categorie_id);
+            if(is_null($category)){
+                return $this->SendError(trans('messages.found_category'));
+            }else{
+                if($request->offer_id)
                 $food->offer_id;
-            $food->save();
-            return $this->SendResponse($food,'Food added Successfully!');
+                $food->categorie()->associate($category)->save();
+                return $this->SendResponse($food,trans('messages.add_food'));
+            }
 
         } catch (\Throwable $th) {
-            return $this->SendError('Error ',$th->getMessage());
+            return $this->SendError(trans('messages.try_error'),$th->getMessage());
         }
     }
 
 
     public function showFood(Request $request,$id)
     {
-        $food=Food::findOrFail($id);
-        if(!$food){
-            return $this->SendError('food not founded!');
-        }else{
-            if(auth('api')->user()){
-                $user=Auth::user();
-                if(Gate::allows('isAdmin')){
-                    return $this->SendResponse($food,'food retrieved Successfully!');
-                }
-          }
-          $foodUser=$food->pluck('id','nom','description','prix','image','category_id','offer_id');
-        }
+        $food=Repas::find($id);
+        dd($food->getNomAttribute());
+        //dd($food);
+        if(is_null($food))
+            return $this->SendError(trans('messages.found_food'));
+
+        return $this->SendResponse($food,trans('messages.show_food'));
+
+
     }
 
     public function updateFood(Request $request, $id)
     {
-        $user=Auth::user();
-          //verify if user is admin
-        $this->authorize('isAdmin',$user);
+        if(Gate::denies('isAdmin')){
+            return $this->SendError(trans('messages.admin_permession'));
+        }
         //find food
-        $food=Food::findOrFail($id);
+        $food=Repas::find($id);
+        if(is_null($food))
+            return $this->SendError(trans('messages.found_food'));
         //validate data
         $validator=Validator::make($request->all(),[
-            'nom'         => 'required|unique:foods',
-            'description' => 'required',
-            'prix'        => 'required',
-            'image'       => 'required|mimes:jpg,jpeg,png|max:2048',
-            'category_id' => 'required',
+        'nom_fr'                =>'required',
+        'nom_en'                =>'nullable',
+        'nom_ar'                =>'nullable',
+        'description_fr'        => 'required',
+        'description_en'        =>'nullable',
+        'description_ar'        =>'nullable',
+        'prix'                  =>'required',
+        'image'                 =>'required|mimes:jpg,jpeg,png|max:2048',
+        'stock'                 =>'required',
+        'categorie_id'          =>'required',
+        'offre_id'              =>'nullable',
 
         ]);
         if($validator->fails())
-            return $this->SendError('Error Validator ', $validator->errors());
+            return $this->SendError(trans('messages.error_validator'), $validator->errors());
         //try to add food into database
         try {
-            $food->nom=$request->nom;
-            $food->description=$request->description;
+            $food->nom_fr=$request->nom_fr;
+            $food->nom_en=$request->nom_en;
+            $food->nom_ar=$request->nom_ar;
+            $food->description_fr=$request->description_fr;
+            $food->description_en=$request->description_en;
+            $food->description_ar=$request->description_ar;
             $food->prix=$request->prix;
-            $image = $request->file('image_c');
+            //$food->category_id=$request->category_id;
+            //dd($food);
+            $image = $request->file('image');
             $filename = time() . random_int(1,100). '.' .$image->guessExtension();
-            Storage::putFileAs('images/categories',$image,$filename);
-            $food->image_c=$filename;
-            $food->category_id=$request->category_id;
-            $food->save();
-            return $this->SendResponse($food,'food updated Successfully!');
+            //dd($filename);
+            $oldImage=Repas::find($food->id);
+            //dd($oldImage->photos);
+            if($oldImage->image){
+                //dd(Storage::exists('images/categories/'.$oldImage->image_c));
+                try{
+                    if((Storage::exists('images/foods/'.$oldImage->image))){
+                       Storage::delete('images/foods/'.$oldImage->image);
+                    }else{
+                        //File does not exists.;
+                        return $this->SendError(trans('messages.file_exist'),$validator->errors());
+                    }
+                }catch(\Throwable $th){
+                    return $this->SendError($th->getMessage(), 400);
+                }
+            }
+            Storage::putFileAs('images/foods',$image,$filename);
+            $food->image=$filename;
+            $food->stock=$request->stock;
+            //find categorie
+            $category=Categorie::find($request->categorie_id);
+            if(is_null($category)){
+                return $this->SendError(trans('messages.found_category'));
+            }else{
+                if($request->offer_id)
+                $food->offer_id;
+                $food->categorie()->associate($category)->save();
+                return $this->SendResponse($food,trans('messages.add_food'));
+            }
+
+            return $this->SendResponse($food,trans_choice('messages.update_food',1));
 
         } catch (\Throwable $th) {
-            return $this->SendError('Error to update this food',$th->getMessage());
+            return $this->SendError(trans_choice('messages.update_food',2),$th->getMessage());
         }
     }
 
     public function updateStatusProduct(Request $request,$id){
-        $user=Auth::user();
-        //verify if user is admin
-      $this->authorize('isAdmin',$user);
-      //find food
-      $food=Food::findOrFail($id);
+
+        if(Gate::denies('isAdmin')){
+            return $this->SendError(trans('messages.admin_permession'));
+        }
+        //find food
+        $food=Repas::find($id);
+        if(is_null($food))
+            return $this->SendError(trans('messages.found_food'));
       //validate data
       $validator=Validator::make($request->all(),[
           'recommandee' => 'required|',
@@ -137,27 +208,27 @@ class FoodController extends BaseController
           $food->populaire=$request->populaire;
           $food->nouveau=$request->nouveau;
           $food->save();
-          return $this->SendResponse($food,'food status updated Successfully!');
+          return $this->SendResponse($food,trans_choice('messages.status_food',1));
       } catch (\Throwable $th) {
-        return $this->SendError('Error to update food status',$th->getMessage());
+        return $this->SendError(trans_choice('messages.status_food',2),$th->getMessage());
       }
 
     }
 
     public function destroyFood(Request $request, $id)
     {
-        $user=Auth::user();
-        //verify if user is admin
-        $this->authorize('isAdmin',$user);
+        if(Gate::denies('isAdmin')){
+            return $this->SendError(trans('messages.admin_permession'));
+        }
         //find food
-        $food=Food::findOrFail($id);
-        if(!$food)
-            return $this->SendError('food not founded');
+        $food=Repas::find($id);
+        if(is_null($food))
+        return $this->SendError(trans('messages.found_food'));
         try {
             $food->delete();
-            return $this->SendResponse($food, 'food deleted successfully');
+            return $this->SendResponse($food,trans_choice('messages.delete_food',1));
         } catch (\Throwable $th) {
-            return $this->SendError('Error to delete food',$th->getMessage());
+            return $this->SendError(trans_choice('messages.delete_food',2),$th->getMessage());
         }
     }
 
@@ -165,12 +236,12 @@ class FoodController extends BaseController
     public function searchFood(Request $request){
         try {
             $data=$request->data;
-            $foods=Food::where('nom','like', '%' . $data . '%');
+            $foods=Repas::where('nom_fr','like', '%' . $data . '%')->get();
             if($foods->isEmpty())
-                return $this->SendError('can\'t find this food name ,try by other keywords');
-            return $this->SendResponse($foods,'foods founded ');
+                return $this->SendError(trans_choice('messages.search_food',2));
+            return $this->SendResponse($foods,trans_choice('messages.search_food',1));
         } catch (\Throwable $th) {
-            return $this->SendError('Error',$th->getMessage());
+            return $this->SendError($th->getMessage());
         }
 
 

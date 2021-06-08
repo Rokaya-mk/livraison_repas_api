@@ -36,20 +36,23 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
  });
 
  //Category Routes
- Route::get('categories','API\CategoryController@categories');
- Route::post('add-category','API\CategoryController@addNewCategory')->middleware('auth:api');
- Route::get('show-categoryProducts/{idCategory}','API\CategoryController@showCategoryProducts');
- Route::post('update-category/{id}','API\CategoryController@updateCategory')->middleware('auth:api');
- Route::delete('delete-category/{id}','API\CategoryController@destroyCategory')->middleware('auth:api');
+ Route::get('categories','API\CategorieController@categories')->middleware('localization');
+ Route::post('add-category','API\CategorieController@addNewCategory')->middleware('auth:api','localization');
+ Route::get('show-categoryProducts/{idCategory}','API\CategorieController@showCategoryProducts')->middleware('localization');
+ Route::get('show-category/{idCategory}','API\CategorieController@showCategory')->middleware('localization');
+ Route::post('update-category/{id}','API\CategorieController@updateCategory')->middleware('auth:api','localization');
+ Route::delete('delete-category/{id}','API\CategorieController@destroyCategory')->middleware('auth:api','localization');
 
  //Food Routes
- Route::get('foods','API\FoodController@foods');
- Route::post('add-newFood','API\FoodController@addNewFood')->middleware('auth:api');
- Route::get('show-food/{id}','API\FoodController@showFood');
- Route::put('update-food/{id}','API\FoodController@updateFood')->middleware('auth:api');
- Route::put('update-foodStatus/{id}','API\FoodController@updateStatusProduct')->middleware('auth:api');
- Route::delete('delete-food/{id}','API\FoodController@destroyFood')->middleware('auth:api');
- Route::get('search-food','API\FoodController@searchFood');
+
+Route::get('foods','API\FoodController@foods')->middleware('localization');
+Route::post('add-newFood','API\FoodController@addNewFood')->middleware('auth:api','localization');
+Route::get('show-food/{id}','API\FoodController@showFood')->middleware('localization');
+Route::post('update-food/{id}','API\FoodController@updateFood')->middleware('auth:api','localization');
+Route::post('update-foodStatus/{id}','API\FoodController@updateStatusProduct')->middleware('auth:api','localization');
+Route::delete('delete-food/{id}','API\FoodController@destroyFood')->middleware('auth:api','localization');
+Route::get('search-food','API\FoodController@searchFood')->middleware('localization');
+
 
  //Offer Routes\
  Route::middleware('auth:api')->group( function (){

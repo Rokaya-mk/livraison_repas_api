@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Categorie;
+use App\Models\Promotion;
 use App\Models\Repas;
 use Auth;
 use Gate;
@@ -20,7 +21,7 @@ class FoodController extends BaseController
     public function foods(Request $request)
     {
         // $foods=Repas::select('id','nom_'.App::getLocale(),'description_'.App::getLocale(),
-        //                     'prix','image','stock','categorie_id','offre_id',
+        //                     'prix','image','stock','categorie_id','promotion_id',
         //                     'recommandee','populaire','nouveau','created_at','updated_at'
         //                     )->get();
 
@@ -38,7 +39,6 @@ class FoodController extends BaseController
         if(Gate::denies('isAdmin')){
             return $this->SendError(trans('messages.admin_permession'));
         }
-
         //validate data
         $validator=Validator::make($request->all(),[
         'nom_fr'                =>'required|unique:repas',
@@ -51,7 +51,7 @@ class FoodController extends BaseController
         'image'                 =>'required|mimes:jpg,jpeg,png|max:2048',
         'stock'                 =>'required',
         'categorie_id'          =>'required',
-        'offre_id'              =>'nullable',
+        'promotion_id'              =>'nullable',
         // 'recommandee'           =>'required',
         // 'populaire'             =>'required',
         // 'nouveau'               =>'required'
@@ -63,7 +63,6 @@ class FoodController extends BaseController
         //try to add category into database
         try {
             $food = new Repas();
-            //dd($food);
             $food->nom_fr=$request->nom_fr;
             $food->nom_en=$request->nom_en;
             $food->nom_ar=$request->nom_ar;
@@ -80,13 +79,17 @@ class FoodController extends BaseController
             $food->stock=$request->stock;
             //find categorie
             $category=Categorie::find($request->categorie_id);
-            if(is_null($category)){
+            if(is_null($category))
                 return $this->SendError(trans('messages.found_category'));
-            }else{
-                if($request->offer_id)
-                $food->offer_id;
-                $food->categorie()->associate($category)->save();
-                return $this->SendResponse($food,trans('messages.add_food'));
+            if($request->promotion_id){
+                $promotion=Promotion::find($request->promotion_id);
+                if(is_null($promotion))
+                    return $this->SendError(trans_choice('messages.promo_show',2));
+            $food->promotion_id=$request->promotion_id;
+            $food->categorie()->associate($category);
+            $food->promotion()->associate($promotion);
+            $food->save();
+            return $this->SendResponse($food,trans('messages.add_food'));
             }
 
         } catch (\Throwable $th) {
@@ -98,7 +101,6 @@ class FoodController extends BaseController
     public function showFood(Request $request,$id)
     {
         $food=Repas::find($id);
-        dd($food->getNomAttribute());
         //dd($food);
         if(is_null($food))
             return $this->SendError(trans('messages.found_food'));
@@ -129,8 +131,7 @@ class FoodController extends BaseController
         'image'                 =>'required|mimes:jpg,jpeg,png|max:2048',
         'stock'                 =>'required',
         'categorie_id'          =>'required',
-        'offre_id'              =>'nullable',
-
+        'promotion_id'              =>'nullable',
         ]);
         if($validator->fails())
             return $this->SendError(trans('messages.error_validator'), $validator->errors());
@@ -143,8 +144,6 @@ class FoodController extends BaseController
             $food->description_en=$request->description_en;
             $food->description_ar=$request->description_ar;
             $food->prix=$request->prix;
-            //$food->category_id=$request->category_id;
-            //dd($food);
             $image = $request->file('image');
             $filename = time() . random_int(1,100). '.' .$image->guessExtension();
             //dd($filename);
@@ -168,17 +167,18 @@ class FoodController extends BaseController
             $food->stock=$request->stock;
             //find categorie
             $category=Categorie::find($request->categorie_id);
-            if(is_null($category)){
+            if(is_null($category))
                 return $this->SendError(trans('messages.found_category'));
-            }else{
-                if($request->offer_id)
-                $food->offer_id;
-                $food->categorie()->associate($category)->save();
-                return $this->SendResponse($food,trans('messages.add_food'));
-            }
-
+            if($request->promotion_id){
+                $promotion=Promotion::find($request->promotion_id);
+                if(is_null($promotion))
+                    return $this->SendError(trans_choice('messages.promo_show',2));
+            $food->promotion_id=$request->promotion_id;
+            $food->categorie()->associate($category);
+            $food->promotion()->associate($promotion);
+            $food->save();
             return $this->SendResponse($food,trans_choice('messages.update_food',1));
-
+         }
         } catch (\Throwable $th) {
             return $this->SendError(trans_choice('messages.update_food',2),$th->getMessage());
         }

@@ -55,12 +55,13 @@ Route::get('search-food','API\FoodController@searchFood')->middleware('localizat
 
 
  //Offer Routes\
- Route::middleware('auth:api')->group( function (){
-    Route::get('offers','API\OfferController@displayOffers');
-    Route::post('add-newOffer','API\OfferController@storeNewOffer');
-    Route::get('show-offer/{id}','API\OfferController@showOffer');
-    Route::put('update-offer/{id}','API\OfferController@updateOffer');
-    Route::delete('delete-offer/{id}','API\OfferController@destroyOffer');
-    Route::put('disable-offer/{id}','API\OfferController@disableOffer');
+ Route::middleware('auth:api','localization')->group( function (){
+    Route::get('promotions','API\PromotionController@displayPromotions');
+    Route::post('add-newPromotion','API\PromotionController@storeNewPromotion');
+    Route::get('show-promotion/{id}','API\PromotionController@showPromotion');
+    Route::get('show-promotionProducts/{id}','API\PromotionController@showPromotionProducts');
+    Route::put('update-promotion/{id}','API\PromotionController@updatePromotion');
+    Route::delete('delete-promotion/{id}','API\PromotionController@destroyPromotion');
+    Route::put('disable-promotion/{id}','API\PromotionController@disablePromotion');
  });
 

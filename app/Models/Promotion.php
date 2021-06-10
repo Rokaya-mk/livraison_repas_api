@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Offre extends Model
+class Promotion extends Model
 {
     use HasFactory;
     protected $fillable=[
-        'description_offre_fr',
-        'description_offre_en',
-        'description_offre_ar',
-        'valeur_offre',
-        'type_offre',
+        'description_promotion_fr',
+        'description_promotion_en',
+        'description_promotion_ar',
+        'valeur_promotion',
+        'type_promotion',
         'active',
         'date_creation',
         'date_experation',

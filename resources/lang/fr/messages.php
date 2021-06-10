@@ -64,6 +64,17 @@ return [
     'update_cat'                    =>'La categorie a été mis à jour avec succès!|Erreur de modifier la categorie',
     //delete category
     'delete_cat'                   =>'categorie a été supprimer avec succès!|Erreur de supression du categorie',
+    //--------------------------------------promotionController-----------------------------------------------------
+    //displaypromotions
+    'promotions_msg'               =>'La liste des promotions a été récupérée avec succès!|liste des promotions est vide!',
+    'promo_date_create'            =>'date de création du promotion doit être plus grand que la date aujourd\'hui',
+    'promo_date_exp'               =>'la date d\'éxperation ne peut pas être plus petite que la date de création',
+    'promo_add'                    =>'La promotion a été ajouter avec succès !',
+    'promo_show'                   => 'la promotion a été récupérée avec succès!|Cet repas n\'existe pas!',
+    'promo_products'               =>'La liste des produits de la promotion a été récupérée avec succès!|Aucun produit dans cette promotion!',
+    'promo_update'                 => 'La promotion a été mis à jour avec succès!',
+    'promo_disable'                =>'la promotion a été désactiver avec succès!',
+    'promo_delete'                 =>'promotion a été supprimer avec succès!|Erreur de supression du promotion',
 
    ];
 

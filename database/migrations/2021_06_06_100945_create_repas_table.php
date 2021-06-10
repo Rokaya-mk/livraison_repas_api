@@ -25,16 +25,13 @@ class CreateRepasTable extends Migration
             $table->string('image');
             $table->bigInteger('stock');
             $table->unsignedBigInteger('categorie_id');
-            $table->unsignedBigInteger('offre_id')->nullable();
+            //$table->unsignedBigInteger('promotion_id')->nullable();
             $table->boolean('recommandee')->default(0);
             $table->boolean('populaire')->default(0);
             $table->boolean('nouveau')->default(1);
             $table->timestamps();
             $table->foreign('categorie_id')->references('id')->on('categories')->onUpdate('cascade');
-            $table->foreign('offre_id')
-                    ->references('id')
-                    ->on('offres')
-                    ->onDelete('set null');
+            //$table->foreign('promotion_id') ->references('id')->on('promotions')->onDelete('set null');
         });
     }
 

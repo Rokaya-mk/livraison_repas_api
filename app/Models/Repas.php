@@ -22,7 +22,7 @@ class Repas extends Model
         'image',
         'stock',
         'categorie_id',
-        'offre_id',
+        'promotion_id',
         // 'recommandee',
         // 'populaire',
         // 'nouveau'
@@ -52,8 +52,8 @@ class Repas extends Model
         return $this->hasMany('App\Models\Commentaire');
     }
 
-    public function offre(){
-        return $this->belongsTo('App\Models\Offre');
+    public function promotion(){
+        return $this->belongsTo('App\Models\Promotion');
     }
 
     public function commandes(){

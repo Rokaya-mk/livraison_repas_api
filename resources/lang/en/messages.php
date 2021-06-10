@@ -64,10 +64,17 @@ return [
     'update_cat'                   =>'category updated Successfully!|Error to update this category',
     //delete category
     'delete_cat'                   =>'category deleted successfully|Error to delete category',
-
-
-
-
+//--------------------------------------promotionController-----------------------------------------------------
+    //displaypromotions
+    'promotions_msg'               =>'Promotions list retrieved Successfully!|promotions list is empty!',
+    'promo_date_create'            =>'date creation of promotion must be greater than date now',
+    'promo_date_exp'               =>'experired date can not be less than created date',
+    'promo_add'                    =>'promotion added Successfully!',
+    'promo_show'                   =>'promotion was retrieved Successfully!|promotion not founded',
+    'promo_products'               =>'products promotion retrieved Successfully!|there is no product with this promotion',
+    'promo_update'                 =>'promotions updated Successfully!',
+    'promo_disable'                =>'promotion has been deactivated successfully!',
+    'promo_delete'                 =>'promotion deleted successfully|Error to delete promotion',
 
    ];
 

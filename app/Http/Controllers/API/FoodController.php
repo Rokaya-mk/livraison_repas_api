@@ -6,6 +6,7 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Categorie;
 use App\Models\Promotion;
 use App\Models\Repas;
+use App\ResetPromo;
 use Auth;
 use Gate;
 use Illuminate\Http\Request;
@@ -26,11 +27,17 @@ class FoodController extends BaseController
         //                     )->get();
 
         $foods=Repas::all();
+        $promo=new ResetPromo();
+
       if($foods->isEmpty())
             //foods list is empty!
            //dd($request->header('localization'));
             return $this->SendError(trans_choice('messages.foods_msg',2));
             //Foods list retrieved Successfully!
+        foreach($foods as $food){
+            //dd($food->id);
+            $promo->resetPromotionIdRepas($food->id);
+        }
         return $this->SendResponse($foods,trans_choice('messages.foods_msg',1));
     }
 

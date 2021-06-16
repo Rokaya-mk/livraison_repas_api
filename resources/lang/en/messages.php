@@ -75,6 +75,9 @@ return [
     'promo_update'                 =>'promotions updated Successfully!',
     'promo_disable'                =>'promotion has been deactivated successfully!',
     'promo_delete'                 =>'promotion deleted successfully|Error to delete promotion',
+    //--------------------------------CartController-----------------------------------------------------
+    //getMyCart
+    'get_cart'                     =>''
 
    ];
 

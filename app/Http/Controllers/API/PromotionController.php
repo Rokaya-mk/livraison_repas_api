@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Promotion;
+use App\Models\Repas;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -180,4 +181,6 @@ class PromotionController extends BaseController
             return $this->SendError(trans_choice('messages.promo_delete',2),$th->getMessage());
         }
     }
+
+
 }

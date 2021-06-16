@@ -57,6 +57,6 @@ class Repas extends Model
     }
 
     public function commandes(){
-        return $this->belongsToMany('App\Models\Commande');
+        return $this->belongsToMany('App\Models\Commande')->withTimestamps();
     }
 }

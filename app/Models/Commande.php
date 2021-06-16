@@ -22,7 +22,7 @@ class Commande extends Model
     }
 
     public function repas(){
-        return $this->belongsToMany('App\Models\Repas');
+        return $this->belongsToMany('App\Models\Repas')->withTimestamps();
     }
 
 }

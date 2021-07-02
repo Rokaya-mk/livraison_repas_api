@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/storage/app/public/images/categories/{filename}', function ($filename)
+ {
+     $file = \Illuminate\Support\Facades\Storage::get($filename);
+     return response('/storage/app/public/images/categories'.$file, 200)->header('Content-Type', 'image/jpeg');
+ });

@@ -36,7 +36,7 @@ class UserController extends BaseController
                 'password' => 'required',
                 'c_password' => 'required|same:password',
                 'num_telephone'=> 'required|numeric',
-                'photos' => 'nullable|mimes:jpg,jpeg,png|max:2048',
+                // 'photos' => 'nullable|mimes:jpg,jpeg,png|max:2048',
 
             ]);
 
@@ -47,12 +47,12 @@ class UserController extends BaseController
             $input = $request->all();
             $input['password'] = Hash::make($input['password']);
             $user = User::create($input);
-            if ($request->hasFile('photos')) {
-                $image = $request->file('photos');
-                $filename = time() . random_int(1,100). '.' .$image->guessExtension();
-                Storage::putFileAs('images/profiles',$image,$filename);
-                DB::table('utilisateurs')->where('email', $request['email'])->update([ 'photos' => $filename, ]);
-            }
+            // if ($request->hasFile('photos')) {
+            //     $image = $request->file('photos');
+            //     $filename = time() . random_int(1,100). '.' .$image->guessExtension();
+            //     Storage::putFileAs('images/profiles',$image,$filename);
+            //     DB::table('utilisateurs')->where('email', $request['email'])->update([ 'photos' => $filename, ]);
+            // }
 
 
             $token = Str::random(5);
@@ -70,23 +70,23 @@ class UserController extends BaseController
             }
             $userData = User::where('email', $request['email'])->first();
 
-            if($request->has('adresse1')){
-                $adresse=new Adresse();
-                $adresse->adresse1= $request->adresse1 ;
-                if($request->has('adresse2'))
-                $adresse->adresse2= $request->adresse2 ;
-                $adresse->code_postal = $request->code_postal;
-                $adresse->user_id=$userData->id;
-                try {
-                    $user->adresse()->save($adresse);
-                } catch (\Throwable $th) {
-                    return $this->SendError($th->getMessage(), 400);
-                }
+            // if($request->has('adresse1')){
+            //     $adresse=new Adresse();
+            //     $adresse->adresse1= $request->adresse1 ;
+            //     if($request->has('adresse2'))
+            //     $adresse->adresse2= $request->adresse2 ;
+            //     $adresse->code_postal = $request->code_postal;
+            //     $adresse->user_id=$userData->id;
+            //     try {
+            //         $user->adresse()->save($adresse);
+            //     } catch (\Throwable $th) {
+            //         return $this->SendError($th->getMessage(), 400);
+            //     }
 
-            }
+            // }
             $success['name'] = $userData->name;
             $success['role'] = $userData->role;
-            $success['photos'] = $userData->photos;
+            $success['email'] = $userData->email;
             $success['token'] = $userData->createToken('@123*EMOOO*457##')->accessToken;
             return $this->SendResponse($success, trans_choice('messages.register_success',1));
         } catch (\Throwable $th) {
@@ -345,6 +345,7 @@ public function updateProfile(Request $request){
     //dd($user);
     $validator = Validator::make($request->all(), [
         'name' => 'required',
+        'email' => 'email|unique:utilisateurs,email,' . auth()->user()->id,
         'num_telephone'=> 'required|numeric',
         'photos' => 'nullable|mimes:jpg,jpeg,png|max:2048',
     ]);
@@ -376,6 +377,7 @@ public function updateProfile(Request $request){
         $user->photos=$filename;
     }
     $user->name=$request->name;
+    $user->email=$request->email;
     $user->num_telephone=$request->num_telephone;
 
     try {
@@ -407,7 +409,7 @@ public function updateProfile(Request $request){
 }
 
 //show user profile
-public function showMyProfile(Request $request){
+public function showMyProfile(){
     $user=Auth::user();
     try {
         $adresse=Adresse::with('utilisateur')->where('user_id',$user->id)->get();
@@ -430,6 +432,26 @@ public function allDeliveryGuys(Request $request){
             return $this->SendError(trans('messages.exist_delevery'));
         return $this->SendResponse($delivery_guys,200);
     }
+}
+public function getUsers(Request $request){
+    //$user=a
+    return $this->SendResponse('test',200);
+    $enumoption = General::getEnumValues('utilisateurs','role') ;
+    //dd($enumoption['2']);
+    $role=$enumoption['0'];
+    if(Gate::denies('isAdmin')){
+        return $this->SendError(trans('messages.admin_permession'));
+    }else{
+        $delivery_guys=User::where('role',$role)->get();
+        if($delivery_guys->isEmpty())
+            return $this->SendError(trans('messages.exist_delevery'));
+        return $this->SendResponse($delivery_guys,200);
+    }
+}
+
+public function currentUser(Request $request){
+    $user=Auth::user();
+    return $this->SendResponse($user,'current user');
 }
 
 }

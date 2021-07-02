@@ -17,7 +17,7 @@ class Commande extends Model
         'nom_livreur'
     ];
 
-    public function utilisateur(){
+    public function user(){
         return $this->belongsTo('App\Models\User');
     }
 

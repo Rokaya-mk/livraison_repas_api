@@ -14,12 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth:api',)->get('/user', function (Request $request) {
     return $request->user();
 });
 
  //UserController
- Route::post('user_register','API\UserController@userRegister')->middleware('localization');
+ Route::post('register','API\UserController@userRegister');
  Route::post('verification_email','API\UserController@emailVerification')->middleware('localization');
  Route::post('login','API\UserController@login')->middleware('localization');
  Route::post('forgot-password','API\UserController@forgotPassword')->middleware('localization');
@@ -33,8 +33,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     Route::post('update-profile','API\UserController@updateProfile');
     Route::get('profile','API\UserController@showMyProfile');
     Route::get('delivery-guys','API\UserController@allDeliveryGuys')->middleware('can:isAdmin');
- });
+    Route::get('get-users','API\UserController@getUsers');
 
+ });
+ Route::get('current-user','API\UserController@currentUser');
  //Category Routes
  Route::get('categories','API\CategorieController@categories')->middleware('localization');
  Route::post('add-category','API\CategorieController@addNewCategory')->middleware('auth:api','localization');

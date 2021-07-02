@@ -12,12 +12,8 @@ class Repas extends Model
     use HasFactory;
     public $table='repas';
     protected $fillable=[
-        'nom_fr',
-        'nom_en',
-        'nom_ar',
-        'description_fr',
-        'description_en',
-        'description_ar',
+        'nom',
+        'description',
         'prix',
         'image',
         'stock',

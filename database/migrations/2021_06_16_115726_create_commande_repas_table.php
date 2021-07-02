@@ -20,8 +20,8 @@ class CreateCommandeRepasTable extends Migration
             $table->decimal('prix', 10, 2);
             $table->integer('quantite')->default(1);
             $table->timestamps();
-            $table->foreign('repas_id')->references('id')->on('repas') ->onDelete('cascade');
-            $table->foreign('commande_id')->references('id')->on('commandes') ->onDelete('cascade');
+            $table->foreign('repas_id')->references('id')->on('repas')->onDelete('cascade');
+            $table->foreign('commande_id')->references('id')->on('commandes')->onDelete('cascade');
         });
     }
 

@@ -33,9 +33,7 @@ class PromotionController extends BaseController
             return $this->SendError(trans('messages.admin_permession'));
         //validate data
         $validator=Validator::make($request->all(),[
-            'description_promotion_fr'         => 'required|unique:promotions',
-            'description_promotion_en'         => 'required',
-            'description_promotion_ar'         => 'required',
+            'description_promotion'         => 'required|unique:promotions',
             'valeur_promotion'                 => 'required|unique:promotions',
             'type_promotion'                   =>'required|in:Percent,fix',
             'active'                           =>'required',
@@ -47,9 +45,7 @@ class PromotionController extends BaseController
         //try to add promotion into database
         try {
             $promotion = new Promotion();
-            $promotion->description_promotion_fr=$request->description_promotion_fr;
-            $promotion->description_promotion_en=$request->description_promotion_en;
-            $promotion->description_promotion_ar=$request->description_promotion_ar;
+            $promotion->description_promotion=$request->description_promotion;
             $promotion->valeur_promotion=$request->valeur_promotion;
             $promotion->type_promotion=$request->type_promotion;
             $promotion->active=$request->active;
@@ -115,9 +111,7 @@ class PromotionController extends BaseController
         }else{
             //validate data
             $validator=Validator::make($request->all(),[
-            'description_promotion_fr'         => 'required',
-            'description_promotion_en'         => 'required',
-            'description_promotion_ar'         => 'required',
+            'description_promotion'         => 'required',
             'valeur_promotion'                 => 'required',
             'type_promotion'                   =>'required|in:Percent,fix',
             'active'                           =>'required',
@@ -129,9 +123,7 @@ class PromotionController extends BaseController
                 return $this->SendError(trans('messages.error_validator'), $validator->errors());
             //try to add promotion into database
             try {
-                $promotion->description_promotion_fr=$request->description_promotion_fr;
-                $promotion->description_promotion_en=$request->description_promotion_en;
-                $promotion->description_promotion_ar=$request->description_promotion_ar;
+                $promotion->description_promotion=$request->description_promotion;
                 $promotion->valeur_promotion=$request->valeur_promotion;
                 $promotion->type_promotion=$request->type_promotion;
                 $promotion->active=$request->active;

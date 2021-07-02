@@ -15,12 +15,8 @@ class CreateCategoriesTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('nom_fr')->unique();
-            $table->string('nom_en')->nullable();
-            $table->string('nom_ar')->nullable();
-            $table->longText('description_fr');
-            $table->longText('description_en')->nullable();
-            $table->longText('description_ar')->nullable();
+            $table->string('nom')->unique();
+            $table->longText('description_c');
             $table->string('image_c');
             $table->timestamps();
         });

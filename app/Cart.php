@@ -20,7 +20,10 @@ class Cart
     }
     //add new item
     public function add($item, $id,$quantity,$promo) {
-        $newItem=['quantity'=>0, 'price' =>$item->prix ,'promoType' =>$promo->type_promotion ,'item'=>$item ];
+        $type_promo=null;
+        if(!is_null($promo))
+            $type_promo=$promo->type_promotion;
+        $newItem=['quantity'=>0, 'price' =>$item->prix ,'promoType' =>$type_promo ,'item'=>$item ];
         if ($this->items) {
             if (array_key_exists($id, $this->items)) {
                 $newItem = $this->items[$id];
@@ -34,6 +37,7 @@ class Cart
                 $newItem['price'] = $item->prix - ($promo->valeur_promotion) ;
             }
         }
+
         $newItem['price']=($newItem['price'])*$newItem['quantity'];
         $newItem['price']=number_format($newItem['price'],2);
         $this->items[$id] = $newItem;

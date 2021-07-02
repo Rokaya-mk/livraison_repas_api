@@ -22,7 +22,7 @@ class CreateCommandesTable extends Migration
             $table->enum('status', ['en attente','en cours','livrée','terminée','annulée','expirée'])->default('en attente');
             $table->string('nom_livreur')->nullable();
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('commandes') ->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('utilisateurs')->onDelete('cascade');
         });
     }
 

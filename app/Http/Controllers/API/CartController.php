@@ -43,6 +43,7 @@ class CartController extends BaseController
         $cart->add($food,$food->id,$quantity,$promo);
         $request->session()->put('cart', $cart);
         return $this->SendResponse($cart,'cart added Successfully!');
+
     }
 
     //update  Cart

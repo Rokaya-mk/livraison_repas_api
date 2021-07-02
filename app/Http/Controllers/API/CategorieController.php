@@ -17,7 +17,10 @@ class CategorieController extends BaseController
         $categories=Categorie::all();
         if($categories->isEmpty())
             return $this->SendError(trans_choice('messages.categories_msg',2));//categories list is empty!
-        return $this->SendResponse($categories,trans_choice('messages.categories_msg',1));//Categories list retrieved Successfully!
+            //$reslt= $this->SendResponse($categories,'Categories list retrieved Successfully!');
+            return response()->json($categories,200);
+
+       //Categories list retrieved Successfully!
     }
 //add new category
     public function addNewCategory(Request $request)
@@ -27,12 +30,8 @@ class CategorieController extends BaseController
         }
         //validate data
         $validator=Validator::make($request->all(),[
-            'nom_fr'=> 'required|unique:categories',
-            'nom_en'=> 'nullable',
-            'nom_ar'=> 'nullable',
-            'description_fr' => 'required',
-            'description_en' => 'nullable',
-            'description_ar' => 'nullable',
+            'nom'=> 'required|unique:categories',
+            'description_c' => 'required',
             'image_c' =>'required|mimes:jpg,jpeg,png|max:2048'
         ]);
         if($validator->fails())
@@ -41,12 +40,8 @@ class CategorieController extends BaseController
         //try to add category into database
         try {
             $category = new Categorie();
-            $category->nom_fr=$request->nom_fr;
-            $category->nom_en=$request->nom_en;
-            $category->nom_ar=$request->nom_ar;
-            $category->description_fr=$request->description_fr;
-            $category->description_en=$request->description_en;
-            $category->description_ar=$request->description_ar;
+            $category->nom=$request->nom;
+            $category->description_c=$request->description_c;
             $image = $request->file('image_c');
             $filename = time() . random_int(1,100). '.' .$image->guessExtension();
             Storage::putFileAs('images/categories',$image,$filename);
@@ -100,12 +95,8 @@ class CategorieController extends BaseController
         }
         //validate data
         $validator=Validator::make($request->all(),[
-            'nom_fr'=> 'required|unique:categories',
-            'nom_en'=> 'nullable',
-            'nom_ar'=> 'nullable',
-            'description_fr' => 'required',
-            'description_en' => 'nullable',
-            'description_ar' => 'nullable',
+            'nom'=> 'required|unique:categories',
+            'description_c' => 'required',
             'image_c' =>'required|mimes:jpg,jpeg,png|max:2048'
         ]);
 
@@ -113,12 +104,8 @@ class CategorieController extends BaseController
             return $this->SendError(trans('messages.error_validator'), $validator->errors());
         //try to add category into database
         try {
-            $category->nom_fr=$request->nom_fr;
-            $category->nom_en=$request->nom_en;
-            $category->nom_ar=$request->nom_ar;
-            $category->description_fr=$request->description_fr;
-            $category->description_en=$request->description_en;
-            $category->description_ar=$request->description_ar;
+            $category->nom=$request->nom;
+            $category->description_c=$request->description_c;
             $image = $request->file('image_c');
             $filename = time() . random_int(1,100). '.' .$image->guessExtension();
             //dd($filename);
@@ -165,4 +152,10 @@ class CategorieController extends BaseController
             return $this->SendError(trans_choice('messages.delete_cat',2),$th->getMessage());
         }
     }
+
+    // public function getImage($filename)
+    // {
+    //     $file = \Illuminate\Support\Facades\Storage::get($filename);
+    //     return response($file, 200)->header('Content-Type', 'image/jpeg');
+    // }
 }

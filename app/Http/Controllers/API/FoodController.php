@@ -25,7 +25,7 @@ class FoodController extends BaseController
         //                     'prix','image','stock','categorie_id','promotion_id',
         //                     'recommandee','populaire','nouveau','created_at','updated_at'
         //                     )->get();
-
+        return $this->SendResponse('test',200);
         $foods=Repas::all();
         $promo=new ResetPromo();
 
@@ -48,12 +48,8 @@ class FoodController extends BaseController
         }
         //validate data
         $validator=Validator::make($request->all(),[
-        'nom_fr'                =>'required|unique:repas',
-        'nom_en'                =>'nullable',
-        'nom_ar'                =>'nullable',
-        'description_fr'        => 'required',
-        'description_en'        =>'nullable',
-        'description_ar'        =>'nullable',
+        'nom'                =>'required|unique:repas',
+        'description'           => 'required',
         'prix'                  =>'required',
         'image'                 =>'required|mimes:jpg,jpeg,png|max:2048',
         'stock'                 =>'required',
@@ -70,17 +66,13 @@ class FoodController extends BaseController
         //try to add category into database
         try {
             $food = new Repas();
-            $food->nom_fr=$request->nom_fr;
-            $food->nom_en=$request->nom_en;
-            $food->nom_ar=$request->nom_ar;
-            $food->description_fr=$request->description_fr;
-            $food->description_en=$request->description_en;
-            $food->description_ar=$request->description_ar;
+            $food->nom=$request->nom;
+            $food->description=$request->description;
             $food->prix=$request->prix;
             //$food->category_id=$request->category_id;
             //dd($food);
             $image = $request->file('image');
-            $filename = time() . random_int(1,100). '.' .$image->guessExtension();
+            $filename = time() . random_int(1,100).'.'.$image->guessExtension();
             Storage::putFileAs('images/foods',$image,$filename);
             $food->image=$filename;
             $food->stock=$request->stock;
@@ -128,12 +120,8 @@ class FoodController extends BaseController
             return $this->SendError(trans('messages.found_food'));
         //validate data
         $validator=Validator::make($request->all(),[
-        'nom_fr'                =>'required',
-        'nom_en'                =>'nullable',
-        'nom_ar'                =>'nullable',
-        'description_fr'        => 'required',
-        'description_en'        =>'nullable',
-        'description_ar'        =>'nullable',
+        'nom'                =>'required',
+        'description'        => 'required',
         'prix'                  =>'required',
         'image'                 =>'required|mimes:jpg,jpeg,png|max:2048',
         'stock'                 =>'required',
@@ -144,12 +132,8 @@ class FoodController extends BaseController
             return $this->SendError(trans('messages.error_validator'), $validator->errors());
         //try to add food into database
         try {
-            $food->nom_fr=$request->nom_fr;
-            $food->nom_en=$request->nom_en;
-            $food->nom_ar=$request->nom_ar;
-            $food->description_fr=$request->description_fr;
-            $food->description_en=$request->description_en;
-            $food->description_ar=$request->description_ar;
+            $food->nom=$request->nom;
+            $food->description=$request->description;
             $food->prix=$request->prix;
             $image = $request->file('image');
             $filename = time() . random_int(1,100). '.' .$image->guessExtension();
@@ -243,7 +227,7 @@ class FoodController extends BaseController
     public function searchFood(Request $request){
         try {
             $data=$request->data;
-            $foods=Repas::where('nom_fr','like', '%' . $data . '%')->get();
+            $foods=Repas::where('nom','like', '%' . $data . '%')->get();
             if($foods->isEmpty())
                 return $this->SendError(trans_choice('messages.search_food',2));
             return $this->SendResponse($foods,trans_choice('messages.search_food',1));

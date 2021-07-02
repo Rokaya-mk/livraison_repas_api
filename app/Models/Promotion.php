@@ -9,9 +9,7 @@ class Promotion extends Model
 {
     use HasFactory;
     protected $fillable=[
-        'description_promotion_fr',
-        'description_promotion_en',
-        'description_promotion_ar',
+        'description_promotion',
         'valeur_promotion',
         'type_promotion',
         'active',

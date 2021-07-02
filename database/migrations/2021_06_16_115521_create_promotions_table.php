@@ -15,9 +15,7 @@ class CreatePromotionsTable extends Migration
     {
         Schema::create('promotions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('description_promotion_fr')->unique();
-            $table->string('description_promotion_en')->nullable();
-            $table->string('description_promotion_ar')->nullable();
+            $table->string('description_promotion')->unique();
             $table->decimal('valeur_promotion',8,2);
             $table->enum('type_promotion',['Percent','fix']);
             $table->boolean('active');

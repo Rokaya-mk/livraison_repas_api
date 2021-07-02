@@ -18,20 +18,20 @@ class CategorieTableSeeder extends Seeder
         $now = Carbon::now()->toDateTimeString();
 
         Categorie::insert([
-            ['nom_fr' => 'Pizza', 'nom_en' => 'Pizza','nom_ar' => 'البيتزا',
-            'description_fr' =>'c\'est Pizza categorie','description_en' =>'This is Pizza category','description_ar' =>'هذه قائمة البيتزا',
+            ['nom' => 'Pizza',
+            'description_c' =>'c\'est Pizza categorie',
             'image_c' => '56576085640.png', 'created_at' => $now, 'updated_at' => $now],
 
-            ['nom_fr' => 'jus', 'nom_en' => 'Drinks','nom_ar' => 'العصائر',
-            'description_fr' =>'c\'est jus categorie','description_en' =>'This is Drinks category','description_ar' =>'هذه قائمة العصائر',
+            ['nom_fr' => 'jus',
+            'description_c' =>'c\'est jus categorie',
             'image_c' => '3758181640.png', 'created_at' => $now, 'updated_at' => $now],
 
-            ['nom_fr' => 'Salades', 'nom_en' => 'Salad','nom_ar' => 'السلطات',
-            'description_fr' =>'c\'est Salades categorie','description_en' =>'This is Salad category','description_ar' =>'هذه قائمة السلطات',
+            ['nom_fr' => 'Salades',
+            'description_c' =>'c\'est Salades categorie',
             'image_c' => '162315562284.png', 'created_at' => $now, 'updated_at' => $now],
 
-            ['nom_fr' => 'Burger', 'nom_en' => 'Burger','nom_ar' => 'البرغر',
-            'description_fr' =>'c\'est Burger categorie','description_en' =>'This is Burger category','description_ar' =>'هذه قائمة البرغر',
+            ['nom_fr' => 'Burger',
+            'description_c' =>'c\'est Burger categorie',
             'image_c' => '34334314640.png', 'created_at' => $now, 'updated_at' => $now],
 
 

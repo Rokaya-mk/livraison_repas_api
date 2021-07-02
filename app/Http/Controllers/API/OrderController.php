@@ -8,6 +8,7 @@ use App\Models\Commande;
 use App\Models\CommandeRepas;
 use App\Models\Paiement;
 use App\Models\Repas;
+use App\Models\User;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -37,16 +38,27 @@ class OrderController extends BaseController
                     $order->unique_id_commande = '#'.str_pad($latestOrder->id + 1, 8, "0", STR_PAD_LEFT);
                 }
         $order->user_id=$userId;
+        $user=User::find($userId);
         $order->total=$cart->totalPrice;
-        $order->save();
+        //dd($order);
+        //$user=User::find($userId);
+        try {
+            $order->user()->associate($user);
+            $order->save();
+
+
+        } catch (\Throwable $th) {
+            return $this->SendError('Error',$th->getMessage());
+        }
+         $payment=new Paiement();
         if($request->has('payment_method')){
             try {
-                $payment=new Paiement();
             $payment->user_id=$userId;
             $payment->methode_paiement=$request->payment_method;
             $payment->montant=$order->total;
             $payment->date_paiement=Carbon::now()->format('Y-m-d H:i:s');
             $payment->commande_id=$order->id;
+            $payment->commande()->associate($order);
             $payment->save();
             } catch (\Throwable $th) {
                 return $this->SendError('Error',$th->getMessage());
@@ -54,17 +66,19 @@ class OrderController extends BaseController
         }else{
             return $this->SendError('you must specify payment method');
         }
-
         try {
-            foreach($cart as $item){
-                $product=Repas::find($item->id);
-                $order->repas()->attach($product,[
-                    'prix'    =>$item->price,
-                    'quantite'=>$item->quantity,
+            $products=$cart->items;
+            foreach($products as $product){
+                $productItem=Repas::find( $product['item']->id);
+                $order->repas()->attach($productItem,[
+                    'prix'    =>$product['price'],
+                    'quantite'=>$product['quantity'],
                 ]);
-                $product->stock=$product->stock-($item->quantity);
-                $product->save();
+                $productItem->stock=($productItem->stock)-($product['quantity']);
+                $productItem->save();
             }
+            Session::forget('cart');
+
         } catch (\Throwable $th) {
             return $this->SendError(trans('messages.try_error'),$th->getMessage());
         }

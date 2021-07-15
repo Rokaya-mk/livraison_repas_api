@@ -1,0 +1,27 @@
+$green-color:#09B44D;
+$green-light:#D0F1DD;
+$gray-light:#F6F6F6;
+$black-color:#262626;
+
+body{
+    background-color: #dfdfdf;
+}
+
+.login-card{
+    margin-top: 9%;
+}
+.login-card.card-header{
+    text-align: center;
+    padding: 3% 0;
+    background-color:$green-light;
+}
+.login-card.card-body{
+    padding: 4% 2% 12% 1%;
+}
+button.btn.btn-success{
+    padding:2% 6%;
+    font-weight: bold;
+}
+a.btn{
+    color:$green-color;
+}

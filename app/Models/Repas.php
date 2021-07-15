@@ -11,14 +11,7 @@ class Repas extends Model
 
     use HasFactory;
     public $table='repas';
-    protected $fillable=[
-        'nom',
-        'description',
-        'prix',
-        'image',
-        'stock',
-        'categorie_id',
-        'promotion_id',
+    protected $fillable=['nom','description','prix','image','stock','categorie_id','promotion_id',
         // 'recommandee',
         // 'populaire',
         // 'nouveau'
@@ -26,18 +19,18 @@ class Repas extends Model
     ];
 
 
-    public function getNomAttribute()
-    {
-        $locale = App::getLocale();
-        $column = "nom_" . $locale;
-        return $this->{$column};
-    }
-    public function getDescriptionAttribute()
-    {
-        $locale = App::getLocale();
-        $column = "description_" . $locale;
-        return $this->{$column};
-    }
+    // public function getNomAttribute()
+    // {
+    //     $locale = App::getLocale();
+    //     $column = "nom_" . $locale;
+    //     return $this->{$column};
+    // }
+    // public function getDescriptionAttribute()
+    // {
+    //     $locale = App::getLocale();
+    //     $column = "description_" . $locale;
+    //     return $this->{$column};
+    // }
 
     public function categorie(){
         return $this->belongsTo('App\Models\Categorie');

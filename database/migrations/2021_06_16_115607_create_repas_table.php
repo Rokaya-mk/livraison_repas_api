@@ -22,9 +22,9 @@ class CreateRepasTable extends Migration
             $table->bigInteger('stock');
             $table->unsignedBigInteger('categorie_id');
             //$table->unsignedBigInteger('promotion_id')->nullable();
-            $table->boolean('recommandee')->default(0);
-            $table->boolean('populaire')->default(0);
-            $table->boolean('nouveau')->default(1);
+            // $table->boolean('recommandee')->default(0);
+            // $table->boolean('populaire')->default(0);
+            // $table->boolean('nouveau')->default(1);
             $table->unsignedBigInteger('promotion_id')->nullable();
             $table->timestamps();
             $table->foreign('categorie_id')->references('id')->on('categories')->onUpdate('cascade');

@@ -18,7 +18,7 @@
         <div class="alert alert-success">
             {{ Session::get('status') }}
         </div>
-@endif
+        @endif
 
         <div class="table-responsive">
             <table width=100%>

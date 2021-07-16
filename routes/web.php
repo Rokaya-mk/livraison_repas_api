@@ -58,6 +58,9 @@ Route::get('/promos', [App\Http\Controllers\WEB\PromoController::class, 'index']
 Route::get('/promo/create', [App\Http\Controllers\WEB\PromoController::class, 'create'])->name('promo.create');
 Route::post('/promo/store', [App\Http\Controllers\WEB\PromoController::class, 'store'])->name('promo.store');
 Route::get('/promo/show/{id}', [App\Http\Controllers\WEB\PromoController::class, 'show'])->name('promo.show');
+Route::get('/promo/addFoods/{idPromo}', [App\Http\Controllers\WEB\PromoController::class, 'addFoods'])->name('promo.addFoods');
+Route::post('/promo/addFoodsToPromo/{idPromo}', [App\Http\Controllers\WEB\PromoController::class, 'addPromoFoods'])->name('promo.foods.store');
 Route::get('/promo/edit/{id}', [App\Http\Controllers\WEB\PromoController::class, 'edit'])->name('promo.edit');
 Route::put('/promo/update/{id}', [App\Http\Controllers\WEB\PromoController::class, 'update'])->name('promo.update');
 Route::delete('/promo/destroy/{id}', [App\Http\Controllers\WEB\PromoController::class, 'destroy'])->name('promo.destroy');
+Route::delete('/promo/destroyFood/{idFood}', [App\Http\Controllers\WEB\PromoController::class, 'destroyFood'])->name('promo.food.destroy');

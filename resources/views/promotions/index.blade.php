@@ -10,7 +10,7 @@
         <h3>Lists des Promotions</h3>
         <button><a  href="{{route('promo.create')}}" style="color: #fff">ajouter une promotion</a>
             <span class="las la-arrow-right"></span>
-
+        </button>
 
     </div>
     <div class="card-body">
@@ -18,7 +18,12 @@
         <div class="alert alert-success">
             {{ Session::get('status') }}
         </div>
-@endif
+        @endif
+        @if(Session::has('delete'))
+            <div class="alert alert-danger">
+                {{ Session::get('delete') }}
+            </div>
+        @endif
 
         <div class="table-responsive">
             <table width=100%>
@@ -55,9 +60,9 @@
                             <td> {{ $promotion->date_creation }} </td>
                             <td> {{ $promotion->date_experation }} </td>
                             <td>
-                                <a href=" {{ route('promo.show',['id'=>$promotion->id]) }} "><i class="las la-eye"></i></a> &nbsp;
-                                <a  href=" {{ route('promo.edit',['id'=>$promotion->id]) }} "><i class="lar la-edit"></i></a> &nbsp;&nbsp;
-                                <form class="form-inlin" method="Post" action="{{route('promo.destroy',['id'=>$promotion->id])}}  ">
+                                <a href=" {{ route('promo.show',['id'=>$promotion->id ]) }} " ><i class="las la-eye"></i></a> &nbsp;
+                                <a  href=" {{ route('promo.edit',['id'=>$promotion->id]) }} " ><i class="lar la-edit"></i></a> &nbsp;&nbsp;
+                                <form  class=" {{($promotion->active ==true)? 'invisible' : '' }} form-inlin" method="Post" action="{{route('promo.destroy',['id'=>$promotion->id])}}  ">
                                     @csrf
                                     @method('DELETE')
                                     <button class="trash-bt" type="submit"><i class="las la-trash"></i></button>

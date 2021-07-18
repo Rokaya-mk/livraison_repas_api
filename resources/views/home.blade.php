@@ -42,13 +42,13 @@
                     </a>
                 </li>
                 <li>
-                    <a href="">
+                    <a href=" {{ route('orders') }} ">
                         <span><i class="las la-shopping-bag"></i></span>
                         <span>Commandes</span>
                     </a>
                 </li>
                 <li>
-                    <a href="">
+                    <a href=" {{ route('delivery-G') }} ">
                         <span><i class="las la-truck"></i></span>
                         <span>Livreurs</span>
                     </a>

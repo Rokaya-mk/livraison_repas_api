@@ -46,6 +46,6 @@ class Repas extends Model
     }
 
     public function commandes(){
-        return $this->belongsToMany('App\Models\Commande')->withTimestamps();
+        return $this->belongsToMany('App\Models\Commande')->withTimestamps()->withPivot('prix','quantite');
     }
 }

@@ -27,6 +27,7 @@ Route::get('/storage/app/public/images/categories/{filename}', function ($filena
 
 Auth::routes();
 
+
 Route::get('/home', [App\Http\Controllers\WEB\HomeController::class, 'index'])->name('home');
 Route::get('/dashboard', [App\Http\Controllers\WEB\DashboardController::class, 'index'])->name('dashboard');
 
@@ -64,3 +65,16 @@ Route::get('/promo/edit/{id}', [App\Http\Controllers\WEB\PromoController::class,
 Route::put('/promo/update/{id}', [App\Http\Controllers\WEB\PromoController::class, 'update'])->name('promo.update');
 Route::delete('/promo/destroy/{id}', [App\Http\Controllers\WEB\PromoController::class, 'destroy'])->name('promo.destroy');
 Route::delete('/promo/destroyFood/{idFood}', [App\Http\Controllers\WEB\PromoController::class, 'destroyFood'])->name('promo.food.destroy');
+//Commande Routes
+Route::get('/orders', [App\Http\Controllers\WEB\OrderController::class, 'index'])->name('orders');
+Route::get('/order/show/{idOrder}', [App\Http\Controllers\WEB\OrderController::class, 'show'])->name('order.show.foods');
+Route::get('/order/edit/{idOrder}', [App\Http\Controllers\WEB\OrderController::class, 'edit'])->name('order.edit');
+Route::put('/order/update/{idOrder}', [App\Http\Controllers\WEB\OrderController::class, 'update'])->name('order.update');
+
+//Delivery-Gyus Route
+Route::get('/delivery-G', [App\Http\Controllers\WEB\ManageDeliveryGuys::class, 'index'])->name('delivery-G');
+Route::get('/delivery-G/create', [App\Http\Controllers\WEB\ManageDeliveryGuys::class, 'registration'])->name('delivery-G.create');
+Route::post('delivery-registration', [App\Http\Controllers\WEB\ManageDeliveryGuys::class, 'customRegistration'])->name('register.delivery');
+Route::delete('/delivery-G/destroy/{id}', [App\Http\Controllers\WEB\ManageDeliveryGuys::class, 'destroy'])->name('delivery-G.destroy');
+// Route::get('/delivery-G/create', [App\Http\Controllers\WEB\ManageDeliveryGuys::class, 'create'])->name('delivery-G.create');
+// Route::post('/delivery-G/store', [App\Http\Controllers\WEB\ManageDeliveryGuys::class, 'store'])->name('delivery-G.store');

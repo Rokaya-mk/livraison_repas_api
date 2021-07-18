@@ -25,7 +25,7 @@ class FoodController extends BaseController
         //                     'prix','image','stock','categorie_id','promotion_id',
         //                     'recommandee','populaire','nouveau','created_at','updated_at'
         //                     )->get();
-        return $this->SendResponse('test',200);
+        //return $this->SendResponse('test',200);
         $foods=Repas::all();
         $promo=new ResetPromo();
 
